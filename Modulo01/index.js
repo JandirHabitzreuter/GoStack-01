@@ -3,6 +3,8 @@ const express = require('express');
 //Instânciar servidor
 const server  = express();
 
+server.use(express.json());
+
 // Acessando Rota Localhost:3000/teste
 //server.get('/teste', (req, res)=>{
 // Função para definir o que fazer quando acessar a rota
@@ -15,6 +17,13 @@ const server  = express();
 
 const users = ['Jandir', 'Trycia', 'Miguel'];
 
+// Rota para listar todos os usuarios
+server.get('/users', (req, res)=>{
+
+return res.json(users);
+})
+
+
 //Route Params - vai acessar o id pela rota
 //http://localhost:3000/users/1
 server.get('/users/:index', (req, res)=>{
@@ -25,6 +34,33 @@ return res.json(users[index]);
 
 
 });
+
+server.post('/users', (req, res) =>{
+
+const { name } = req.body;
+users.push(name);
+return res.json(users);
+});
+
+server.delete('/users/:index', (req, res)=>{
+    const { index } = req.params; 
+    users.splice(index,1);
+
+    return res.send();
+
+});
+
+server.put('/users/:index', (req, res)=>{
+    const { index } = req.params; 
+    const { name } = req.body;
+
+    users[index] = name;
+
+return res.json(users);
+
+
+});
+
 
 // Servidor vai estar escutando a porta 3000 (localhost:3000)
 server.listen(3000);
